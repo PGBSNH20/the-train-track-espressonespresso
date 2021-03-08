@@ -11,18 +11,18 @@ namespace TrainEngine
 
         //var fileStream = new FileStream("", FileMode.Open);
 
-        public static void ReadStations()
-        {
-            var lines = File.ReadAllLines("Data/stations.txt");
-            var csv = from line in lines
-                      select (line.Split(',')).ToArray();
+        //public static void ReadStations()
+        //{
+        //    var lines = File.ReadAllLines("Data/stations.txt");
+        //    var csv = from line in lines
+        //              select (line.Split(',')).ToArray();
 
-            var csv = lines.
+        //    var csv = lines.
 
-            csv[0] = StationId;
-            csv[1] = StationName;
-            csv[2] = EndStation;
-        }
+        //    csv[0] = StationId;
+        //    csv[1] = StationName;
+        //    csv[2] = EndStation;
+        //}
 
        
 
