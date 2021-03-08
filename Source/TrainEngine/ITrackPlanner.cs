@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TrainEngine
 {
-    interface ITrackPlanner
+    public interface ITrackPlanner
     {
         ITrackPlanner FollowSchedule();
         ITrackPlanner LevelCrossing();

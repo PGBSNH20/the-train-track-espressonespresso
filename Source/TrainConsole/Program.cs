@@ -1,4 +1,5 @@
 ﻿using System;
+using TrainEngine;
 
 namespace TrainConsole
 {
@@ -6,6 +7,7 @@ namespace TrainConsole
     {
         static void Main(string[] args)
         {
+            //var trackplan = new TrackPlanner().FollowSchedule().LevelCrossing().CloseAt().OpenAt()
             Console.WriteLine("Train track!");
             // Step 1:
             // Parse the traintrack (Data/traintrack.txt) using ORM (see suggested code)
