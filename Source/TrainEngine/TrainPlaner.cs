@@ -6,6 +6,16 @@ namespace TrainEngine
 {
     public class TrainPlaner : ITrainPlaner
     {
+        Train train = new Train();
+        //string[] line = s.split(',');
+
+
+
+        public TrainPlaner(string train)
+        {
+            
+
+        }
         public ITrainPlaner CloseAt()
         {
             throw new NotImplementedException();

@@ -4,8 +4,26 @@ using TrainEngine;
 
 namespace TrainConsole
 {
+    public class TimeTable
+    {
+
+    }
+
+    public class Passenger
+    {
+
+    }
+
+    public class Station
+    {
+
+    }
+
     class Program
     {
+
+        static List<TimeTable> timeTable = new List<TimeTable>();
+
         static void Main(string[] args)
         {
             Console.WriteLine("Train track!");
