@@ -4,20 +4,6 @@ using TrainEngine;
 
 namespace TrainConsole
 {
-    public class TimeTable
-    {
-
-    }
-
-    public class Passenger
-    {
-
-    }
-
-    public class Station
-    {
-
-    }
 
     class Program
     {
