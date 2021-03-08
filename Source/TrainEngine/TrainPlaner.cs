@@ -4,44 +4,44 @@ using System.Text;
 
 namespace TrainEngine
 {
-    class TrackPlanner : ITrackPlanner
+    public class TrainPlaner : ITrainPlaner
     {
-        public ITrackPlanner FollowSchedule()
+        public ITrainPlaner CloseAt()
         {
             throw new NotImplementedException();
         }
 
-        public ITrackPlanner LevelCrossing()
+        public ITrainPlaner FollowSchedule()
         {
             throw new NotImplementedException();
         }
 
-        public ITrackPlanner CloseAt()
+        public ITrainPlaner LevelCrossing()
         {
             throw new NotImplementedException();
         }
 
-        public ITrackPlanner OpenAt()
+        public ITrainPlaner OpenAt()
         {
             throw new NotImplementedException();
         }
 
-        public ITrackPlanner SetSwitch()
+        public ITrainPlaner SetSwitch()
         {
             throw new NotImplementedException();
         }
 
-        public ITrackPlanner StartTrainAt()
+        public ITrainPlaner StartTrainAt()
         {
             throw new NotImplementedException();
         }
 
-        public ITrackPlanner StopTrainAt()
+        public ITrainPlaner StopTrainAt()
         {
             throw new NotImplementedException();
         }
 
-        public ITrackPlanner ToPlan()
+        public ITrainPlaner ToPlan()
         {
             throw new NotImplementedException();
         }
