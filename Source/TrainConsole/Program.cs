@@ -20,7 +20,9 @@ namespace TrainConsole
 
             //Kio:
             //var test = new TrainPlaner().FollowSchedule("").LevelCrossing().CloseAt("").OpenAt("").SetSwitch().ToPlan();
+            var test = new TrainPlanner("");
 
+            test.GetTrainInfo();
 
             // Step 2:
             // Make the trains run in treads
