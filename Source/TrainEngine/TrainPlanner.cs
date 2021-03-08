@@ -12,7 +12,7 @@ namespace TrainEngine
         {
             var trainList = new List<Train>();
 
-            string[] lines = System.IO.File.ReadAllLines("TollFee.csv");
+            string[] lines = System.IO.File.ReadAllLines("trains.txt");
 
             foreach (var line in lines)
             {
