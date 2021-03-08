@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace TrainEngine
 {
@@ -9,22 +10,16 @@ namespace TrainEngine
         public string StationName { get; set; }
         public string EndStation { get; set; }
 
-        //var fileStream = new FileStream("", FileMode.Open);
-
-        public static void ReadStations()
+        public void ReadStations()
         {
             var lines = File.ReadAllLines("Data/stations.txt");
-            var csv = from line in lines
-                      select (line.Split(',')).ToArray();
-
-            var csv = lines.
-
-            csv[0] = StationId;
-            csv[1] = StationName;
-            csv[2] = EndStation;
+            foreach (var line in lines.Skip(1))
+            {
+                var split = line.Split('|');
+                StationId = Convert.ToInt32(split[0]);
+                StationName = split[1];
+                EndStation = split[2];
+            }
         }
-
-       
-
     }
 }
