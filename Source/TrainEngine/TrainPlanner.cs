@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace TrainEngine
 {
@@ -10,6 +11,7 @@ namespace TrainEngine
         public Train TrainName { get; set; }
         public List<ITrain> trainList = new List<ITrain>();
         public List<TimeTable> timeTableList = new List<TimeTable>();
+
         public TrainPlanner(ITrain trainName)
         {
             trainList.Add(trainName);
@@ -19,9 +21,23 @@ namespace TrainEngine
             throw new NotImplementedException();
         }
 
-        public TimeTable FollowSchedule(TimeTable timeTable)
+        public ITrainPlanner FollowSchedule(TimeTable timeTable)
         {
-            timeTableList.Add(timeTable);
+            timeTableList = TimeTable.CsvReader();
+            var query = trainList.Join(
+                timeTableList, 
+                Train => Train.Id , 
+                TimeTable => TimeTable.TrainId, 
+                (Train, TimeTable) => new { 
+                    trainId = Train.Id, 
+                    trainName = Train.Name, 
+                    trainSpeed = Train.MaxSpeed,
+                    trainOperated = Train.Operated,
+                    trainArrival = TimeTable.ArrivalTime,
+                    trainDeparture = TimeTable.DepartureTime,
+                    trainStationId = TimeTable.StationId
+                }
+                );
             return this;
         }
 

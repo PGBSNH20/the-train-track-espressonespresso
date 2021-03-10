@@ -7,7 +7,6 @@
   <ItemGroup>
     <None Remove="Data\passengers.txt" />
     <None Remove="Data\stations.txt" />
-    <None Remove="Data\timetable.txt" />
     <None Remove="Data\trains.txt" />
     <None Remove="Data\traintrack.txt" />
   </ItemGroup>
@@ -19,15 +18,22 @@
     <Content Include="Data\stations.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\timetable.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Data\trains.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\traintrack.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="26.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\timetable.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

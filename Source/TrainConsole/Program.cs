@@ -49,7 +49,7 @@ namespace TrainConsole
             //}
 
 
-            var train1 = new TrainPlanner(new Train(0 , "Liams tåg", 9000, true)).FollowSchedule(new TimeTable(0, 1, "10:55", "21:30"));
+            var train1 = new TrainPlanner(new Train(2 , "Liams tåg", 9000, true)).FollowSchedule(new TimeTable());
 
 
 
