@@ -11,7 +11,6 @@ namespace TrainConsole
 
     class Program
     {
-
         static List<TimeTable> timeTable = new List<TimeTable>();
         public static Clock clock = new Clock(24, 05);
         static void Main(string[] args)
@@ -38,8 +37,6 @@ namespace TrainConsole
 
 
             //trainList = train.GetTrainInfo();
-
-
 
             //foreach (var trainElement in trainList)
             //{
@@ -75,13 +72,6 @@ namespace TrainConsole
             //};
 
             //var travelplan1 = new TrainPlanner(train1);
-
-
-            //Kio:
-            //var test = new TrainPlaner().FollowSchedule("").LevelCrossing().CloseAt("").OpenAt("").SetSwitch().ToPlan();
-            var test = new TrainPlanner("");
-
-            test.GetTrainInfo();
 
             // Step 2:
             // Make the trains run in treads
