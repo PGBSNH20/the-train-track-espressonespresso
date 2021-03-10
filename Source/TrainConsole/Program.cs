@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrainEngine;
+using System.Threading;
 
 namespace TrainConsole
 {
@@ -10,17 +11,16 @@ namespace TrainConsole
     {
 
         static List<TimeTable> timeTable = new List<TimeTable>();
-
+        public static Clock clock = new Clock(24, 05);
         static void Main(string[] args)
         {
+            Time();
 
-            var clock = new Clock(24, 01);
+            Console.WriteLine(clock.TimeDisplay());
 
-            for (int i = 0; i < 100; i++)
-            {
-                clock.ClockIsTicking();
-                Console.WriteLine(clock.TimeDisplay());
-            }
+            Thread.Sleep(6000);
+
+            Console.WriteLine(clock.TimeDisplay());
 
 
             Console.WriteLine("Train track!");
@@ -37,6 +37,15 @@ namespace TrainConsole
 
             // Step 2:
             // Make the trains run in treads
+        }
+
+        static async void Time()
+        {
+            while (true)
+            {
+                clock.ClockIsTicking();
+                await Task.Delay(1000);
+            }
         }
     }
 }
