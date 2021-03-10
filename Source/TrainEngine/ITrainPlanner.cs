@@ -6,11 +6,11 @@ namespace TrainEngine
 {
     public interface ITrainPlanner
     {
-        ITrainPlanner FollowSchedule();
+        TimeTable FollowSchedule(TimeTable timeTable);
         ITrainPlanner LevelCrossing();
         ITrainPlanner CloseAt();
         ITrainPlanner OpenAt();
-        ITrainPlanner SetSwitch(SwitchModel switch1, SwitchDirection switchDirection);
+        ITrainPlanner SetSwitch();
         ITrainPlanner StartTrainAt();
         ITrainPlanner StopTrainAt();
         ITrainPlanner ToPlan();

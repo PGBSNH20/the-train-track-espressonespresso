@@ -8,19 +8,21 @@ namespace TrainEngine
     public class TrainPlanner : ITrainPlanner
     {
         public Train TrainName { get; set; }
-        public TrainPlanner(Train trainName)
+        public List<ITrain> trainList = new List<ITrain>();
+        public List<TimeTable> timeTableList = new List<TimeTable>();
+        public TrainPlanner(ITrain trainName)
         {
-            TrainName = trainName;
-            trainName.GetTrainInfo();
+            trainList.Add(trainName);
         }
         public ITrainPlanner CloseAt()
         {
             throw new NotImplementedException();
         }
 
-        public ITrainPlanner FollowSchedule()
+        public TimeTable FollowSchedule(TimeTable timeTable)
         {
-            throw new NotImplementedException();
+            timeTableList.Add(timeTable);
+            return this;
         }
 
         public ITrainPlanner LevelCrossing()
@@ -33,7 +35,7 @@ namespace TrainEngine
             throw new NotImplementedException();
         }
 
-        public ITrainPlanner SetSwitch(SwitchModel switch1, SwitchDirection switchDirection)
+        public ITrainPlanner SetSwitch()
         {
 
             throw new NotImplementedException();
@@ -51,7 +53,8 @@ namespace TrainEngine
 
         public ITrainPlanner ToPlan()
         {
-            throw new NotImplementedException();
+
+            return this;
         }
     }
 }

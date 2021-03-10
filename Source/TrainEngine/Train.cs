@@ -6,34 +6,22 @@ namespace TrainEngine
 {
     public class Train : ITrain
     {
+        public TimeTable TimeTable { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public int MaxSpeed { get; set; }
         public bool Operated { get; set; }
-        public List<Train> GetTrainInfo()
+
+        public Train(int id, string name, int maxSpeed, bool operated)
         {
-            var trainList = new List<Train>();
-
-            string[] lines = File.ReadAllLines(@"Data\trains.txt");
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] split = lines[i].Split(',');
-                if (i != 0)
-                {
-                    var trainModel = new Train
-                    {
-                        Id = Convert.ToInt32(split[0]),
-                        Name = split[1],
-                        MaxSpeed = Convert.ToInt32(split[2]),
-                        Operated = Convert.ToBoolean(split[3])
-                    };
-                    trainList.Add(trainModel);
-                }
-
-            }
-            return trainList;
+            Id = id;
+            Name = name;
+            MaxSpeed = maxSpeed;
+            Operated = operated;
         }
+
+
+        
     }
 
 

@@ -25,28 +25,33 @@ namespace TrainConsole
 
             //var travelPlan2 = new TrainPlaner(train2).StartTrainAt("10:23").StopTrainAt("10:53").ToPlan();
 
-            var trainList = new List<Train>();
-
-            var train = new Train();
-
-            trainList = train.GetTrainInfo();
+            //var trainList = new List<Train>();
 
 
-            foreach (var trainElement in trainList)
-            {
-                var trains = new Train
-                {
-                    Id = trainElement.Id,
-                    Name = trainElement.Name,
-                    MaxSpeed = trainElement.MaxSpeed,
-                    Operated = trainElement.Operated,
-                };
+            //trainList = train.GetTrainInfo();
 
-                if(trains.Id == 1)
-                {
-                    var travelplan1 = new TrainPlanner(trains);
-                }
-            }
+
+
+            //foreach (var trainElement in trainList)
+            //{
+            //    var trains = new Train
+            //    {
+            //        Id = trainElement.Id,
+            //        Name = trainElement.Name,
+            //        MaxSpeed = trainElement.MaxSpeed,
+            //        Operated = trainElement.Operated,
+            //    };
+
+            //    if(trains.Id == 1)
+            //    {
+            //        var travelplan1 = new TrainPlanner(trains);
+            //    }
+            //}
+
+
+            var train1 = new TrainPlanner(new Train(0 , "Liams tåg", 9000, true)).FollowSchedule(new TimeTable(0, 1, "10:55", "21:30"));
+
+
 
             //var train1 = new Train
             //{

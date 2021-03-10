@@ -6,5 +6,6 @@ namespace TrainEngine
         string Name { get; set; }
         int MaxSpeed { get; set; }
         bool Operated { get; set; }
+        TimeTable TimeTable { get; set; }
     }
 }
