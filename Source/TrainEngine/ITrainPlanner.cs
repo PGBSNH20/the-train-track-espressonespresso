@@ -15,5 +15,6 @@ namespace TrainEngine
         ITrainPlanner StartTrainAt();
         ITrainPlanner StopTrainAt();
         ITrainPlanner ToPlan();
+        void Start();
     }
 }

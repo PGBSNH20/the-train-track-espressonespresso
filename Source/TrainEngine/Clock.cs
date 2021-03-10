@@ -6,11 +6,11 @@ namespace TrainEngine
 {
     public class Clock
     {
-        public int Hours { get; set; }
+        public static int Hours { get; set; }
         public int Minutes { get; set; }
         public Clock(int hours, int minutes)
         {
-            this.Hours = hours;
+            Hours = hours;
             this.Minutes = minutes;
 
             this.CheckingTimeFormat();
@@ -20,11 +20,11 @@ namespace TrainEngine
         {
             if (this.Minutes == 60)
             {
-                this.Hours++;
+                Hours++;
                 this.Minutes = 0;
             }
 
-            if (this.Hours == 24)
+            if (Hours == 24)
             {
                 Hours = 0;
             }
@@ -40,8 +40,10 @@ namespace TrainEngine
         public string TimeDisplay()
         {
             // Convert to string with D2 format, just to get the '00' at the beginning, so that it can represent a digital watch. 
-            return this.Hours.ToString("D2")  + ":" + this.Minutes.ToString("D2");
+            return Hours.ToString("D2")  + ":" + this.Minutes.ToString("D2");
         }
+
+        public static int GetHour() => Hours;
 
     }
 }

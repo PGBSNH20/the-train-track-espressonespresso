@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using TrainEngine;
 using System.Threading;
+using System.Reflection;
 
 namespace TrainConsole
 {
@@ -12,56 +13,27 @@ namespace TrainConsole
     class Program
     {
         static List<TimeTable> timeTable = new List<TimeTable>();
-        public static Clock clock = new Clock(24, 05);
+        public static Clock clock = new Clock(9, 55);
         static void Main(string[] args)
         {
             Time();
 
-            Console.WriteLine(clock.TimeDisplay());
-
-            Thread.Sleep(6000);
-
-            Console.WriteLine(clock.TimeDisplay());
-
-
             Console.WriteLine("Train track!");
-            // Step 1:
-            // Parse the traintrack (Data/traintrack.txt) using ORM (see suggested code)
-            // Parse the trains (Data/trains.txt)
-
-            //var travelPlan1 = new TrainPlaner(train1).FollowSchedule(scheduleTrain1).LevelCrossing().CloseAt("10:23").OpenAt("10:25").SetSwitch(switch1, SwitchDirection.Left).SetSwitch(switch2, SwitchDirection.Right).ToPlan();
-
-            //var travelPlan2 = new TrainPlaner(train2).StartTrainAt("10:23").StopTrainAt("10:53").ToPlan();
-
-            //var trainList = new List<Train>();
-
-
-            //trainList = train.GetTrainInfo();
-
-            //foreach (var trainElement in trainList)
-            //{
-            //    var trains = new Train
-            //    {
-            //        Id = trainElement.Id,
-            //        Name = trainElement.Name,
-            //        MaxSpeed = trainElement.MaxSpeed,
-            //        Operated = trainElement.Operated,
-            //    };
-
-            //    if(trains.Id == 1)
-            //    {
-            //        var travelplan1 = new TrainPlanner(trains);
-            //    }
-            //}
-
+            //GetPropertyValues(clock);
 
             var train1 = new TrainPlanner(new Train(2 , "Liams tåg", 9000, true)).FollowSchedule().ToPlan();
-            var train2 = new TrainPlanner(new Train(3 , "Kios tåg", 3, true)).FollowSchedule().ToPlan();
+            //var train2 = new TrainPlanner(new Train(3 , "Kios tåg", 3, true)).FollowSchedule().ToPlan();
 
-            foreach (var item in train2.TrainInfos)
-            {
-                Console.WriteLine(item.Name + " " + item.DepartureTime);
-            }
+            var thread = new Thread(() => train1.Start());
+            //var thread2 = new Thread(() => train2.Start());
+
+            thread.Start();
+            //thread2.Start();
+
+            //foreach (var item in train2.TrainInfos)
+            //{
+            //    Console.WriteLine(item.Name + " " + item.DepartureTime);
+            //}
 
             //var train1 = new Train
             //{
@@ -82,8 +54,25 @@ namespace TrainConsole
             while (true)
             {
                 clock.ClockIsTicking();
+                Console.WriteLine(clock.TimeDisplay());
                 await Task.Delay(1000);
             }
         }
-    }
+        private static void GetPropertyValues(Object obj)
+        {
+            Type t = obj.GetType();
+            Console.WriteLine("Type is: {0}", t.Name);
+            PropertyInfo[] props = t.GetProperties();
+            Console.WriteLine("Properties (N = {0}):",
+                              props.Length);
+            foreach (var prop in props)
+                if (prop.GetIndexParameters().Length == 0)
+                    Console.WriteLine("   {0} ({1}): {2}", prop.Name,
+                                      prop.PropertyType.Name,
+                                      prop.GetValue(obj));
+                else
+                    Console.WriteLine("   {0} ({1}): <Indexed>", prop.Name,
+                                      prop.PropertyType.Name);
+        }
+}
 }

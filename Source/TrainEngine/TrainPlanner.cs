@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Reflection;
 
 namespace TrainEngine
 {
-    public class TrainInfo 
+    public class TrainInfo
     {
         public int Id;
         public string Name;
+        public string StationName;
         public int Speed;
         public bool Operated;
-        public string ArrivalTime;
-        public string DepartureTime;
+        public int ArrivalTime;
+        public int DepartureTime;
         public int StationId;
     }
 
     public class TrainPlanner : ITrainPlanner
     {
+        //public Clock Clock { get; set; }
         public Train TrainName { get; set; }
         public List<TrainInfo> TrainInfos { get; set; }
 
@@ -35,16 +39,17 @@ namespace TrainEngine
             throw new NotImplementedException();
         }
 
-        public ITrainPlanner FollowSchedule() 
+        public ITrainPlanner FollowSchedule()
         {
             timeTableList = TimeTable.CsvReader();
             _trainInfos = trainList.Join(
-                timeTableList, 
-                Train => Train.Id , 
-                TimeTable => TimeTable.TrainId, 
-                (Train, TimeTable) => new TrainInfo{ 
-                    Id = Train.Id, 
-                    Name = Train.Name, 
+                timeTableList,
+                Train => Train.Id,
+                TimeTable => TimeTable.TrainId,
+                (Train, TimeTable) => new TrainInfo
+                {
+                    Id = Train.Id,
+                    Name = Train.Name,
                     Speed = Train.MaxSpeed,
                     Operated = Train.Operated,
                     ArrivalTime = TimeTable.ArrivalTime,
@@ -87,5 +92,26 @@ namespace TrainEngine
             TrainInfos = _trainInfos;
             return this;
         }
+        public void Start()
+        { 
+
+            Console.WriteLine($"Starting {TrainInfos[0].Name} at {TrainInfos[0].StationId}. Leaving for {TrainInfos[1].StationId} at {TrainInfos[0].DepartureTime}");
+
+            while (Clock.Hours != TrainInfos[0].DepartureTime)
+            {
+                Task.Delay(1000);
+            }
+
+            if (Clock.Hours == TrainInfos[0].DepartureTime)
+            {
+                Console.WriteLine($"Leaving for {TrainInfos[1].StationId}");
+            }
+
+            else
+            {
+                Task.Delay(1000);
+            }
+        }
+
     }
 }
