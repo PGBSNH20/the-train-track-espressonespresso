@@ -21,13 +21,9 @@ namespace TrainConsole
             // Parse the traintrack (Data/traintrack.txt) using ORM (see suggested code)
             // Parse the trains (Data/trains.txt)
 
-            //Kio:
             //var travelPlan1 = new TrainPlaner(train1).FollowSchedule(scheduleTrain1).LevelCrossing().CloseAt("10:23").OpenAt("10:25").SetSwitch(switch1, SwitchDirection.Left).SetSwitch(switch2, SwitchDirection.Right).ToPlan();
 
             //var travelPlan2 = new TrainPlaner(train2).StartTrainAt("10:23").StopTrainAt("10:53").ToPlan();
-
-            
-
 
             var trainList = new List<Train>();
 
@@ -38,7 +34,7 @@ namespace TrainConsole
 
             foreach (var trainElement in trainList)
             {
-                var train1 = new Train
+                var trains = new Train
                 {
                     Id = trainElement.Id,
                     Name = trainElement.Name,
@@ -46,11 +42,10 @@ namespace TrainConsole
                     Operated = trainElement.Operated,
                 };
 
-                if(train1.Id == 1)
+                if(trains.Id == 1)
                 {
-                    var travelplan1 = new TrainPlanner(train1);
+                    var travelplan1 = new TrainPlanner(trains);
                 }
-
             }
 
             //var train1 = new Train

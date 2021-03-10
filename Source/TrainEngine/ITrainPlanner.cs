@@ -10,7 +10,7 @@ namespace TrainEngine
         ITrainPlanner LevelCrossing();
         ITrainPlanner CloseAt();
         ITrainPlanner OpenAt();
-        ITrainPlanner SetSwitch();
+        ITrainPlanner SetSwitch(SwitchModel switch1, SwitchDirection switchDirection);
         ITrainPlanner StartTrainAt();
         ITrainPlanner StopTrainAt();
         ITrainPlanner ToPlan();

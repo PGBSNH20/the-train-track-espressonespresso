@@ -11,6 +11,7 @@ namespace TrainEngine
         public TrainPlanner(Train trainName)
         {
             TrainName = trainName;
+            trainName.GetTrainInfo();
         }
         public ITrainPlanner CloseAt()
         {
@@ -32,8 +33,9 @@ namespace TrainEngine
             throw new NotImplementedException();
         }
 
-        public ITrainPlanner SetSwitch()
+        public ITrainPlanner SetSwitch(SwitchModel switch1, SwitchDirection switchDirection)
         {
+
             throw new NotImplementedException();
         }
 
