@@ -49,9 +49,13 @@ namespace TrainConsole
             //}
 
 
-            var train1 = new TrainPlanner(new Train(2 , "Liams tåg", 9000, true)).FollowSchedule(new TimeTable());
+            var train1 = new TrainPlanner(new Train(2 , "Liams tåg", 9000, true)).FollowSchedule().ToPlan();
+            var train2 = new TrainPlanner(new Train(3 , "Kios tåg", 3, true)).FollowSchedule().ToPlan();
 
-
+            foreach (var item in train2.TrainInfos)
+            {
+                Console.WriteLine(item.Name + " " + item.DepartureTime);
+            }
 
             //var train1 = new Train
             //{

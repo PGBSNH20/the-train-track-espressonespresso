@@ -6,11 +6,25 @@ using System.Linq;
 
 namespace TrainEngine
 {
+    public class TrainInfo 
+    {
+        public int Id;
+        public string Name;
+        public int Speed;
+        public bool Operated;
+        public string ArrivalTime;
+        public string DepartureTime;
+        public int StationId;
+    }
+
     public class TrainPlanner : ITrainPlanner
     {
         public Train TrainName { get; set; }
+        public List<TrainInfo> TrainInfos { get; set; }
+
         public List<ITrain> trainList = new List<ITrain>();
         public List<TimeTable> timeTableList = new List<TimeTable>();
+        private List<TrainInfo> _trainInfos = new List<TrainInfo>();
 
         public TrainPlanner(ITrain trainName)
         {
@@ -21,23 +35,24 @@ namespace TrainEngine
             throw new NotImplementedException();
         }
 
-        public ITrainPlanner FollowSchedule(TimeTable timeTable)
+        public ITrainPlanner FollowSchedule() 
         {
             timeTableList = TimeTable.CsvReader();
-            var query = trainList.Join(
+            _trainInfos = trainList.Join(
                 timeTableList, 
                 Train => Train.Id , 
                 TimeTable => TimeTable.TrainId, 
-                (Train, TimeTable) => new { 
-                    trainId = Train.Id, 
-                    trainName = Train.Name, 
-                    trainSpeed = Train.MaxSpeed,
-                    trainOperated = Train.Operated,
-                    trainArrival = TimeTable.ArrivalTime,
-                    trainDeparture = TimeTable.DepartureTime,
-                    trainStationId = TimeTable.StationId
+                (Train, TimeTable) => new TrainInfo{ 
+                    Id = Train.Id, 
+                    Name = Train.Name, 
+                    Speed = Train.MaxSpeed,
+                    Operated = Train.Operated,
+                    ArrivalTime = TimeTable.ArrivalTime,
+                    DepartureTime = TimeTable.DepartureTime,
+                    StationId = TimeTable.StationId
                 }
-                );
+                ).OrderBy(t => t.DepartureTime).ToList();
+
             return this;
         }
 
@@ -69,7 +84,7 @@ namespace TrainEngine
 
         public ITrainPlanner ToPlan()
         {
-
+            TrainInfos = _trainInfos;
             return this;
         }
     }
