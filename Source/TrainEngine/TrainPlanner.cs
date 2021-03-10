@@ -1,59 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace TrainEngine
 {
+    public class TrainInfo 
+    {
+        public int Id;
+        public string Name;
+        public int Speed;
+        public bool Operated;
+        public string ArrivalTime;
+        public string DepartureTime;
+        public int StationId;
+    }
+
     public class TrainPlanner : ITrainPlanner
     {
-        
+        public Train TrainName { get; set; }
+        public List<TrainInfo> TrainInfos { get; set; }
 
-        public void GetTrainInfo()
+        public List<ITrain> trainList = new List<ITrain>();
+        public List<TimeTable> timeTableList = new List<TimeTable>();
+        private List<TrainInfo> _trainInfos = new List<TrainInfo>();
+
+        public TrainPlanner(ITrain trainName)
         {
-            var trainList = new List<Train>();
-
-            string[] lines = System.IO.File.ReadAllLines(@"Data\trains.txt");
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                string[] split = lines[i].Split(',');
-                if (i != 0)
-                {
-                    var trainModel = new Train
-                    {
-                        Id = Convert.ToInt32(split[0]),
-                        Name = split[1],
-                        MaxSpeed = Convert.ToInt32(split[2]),
-                        Operated = Convert.ToBoolean(split[3])
-                    };
-                    trainList.Add(trainModel);
-                    Console.WriteLine(trainModel.Id);
-                    Console.WriteLine(trainModel.Name);
-                    Console.WriteLine(trainModel.MaxSpeed);
-                    Console.WriteLine(trainModel.Operated);
-                }
-                
-            }
-            foreach (var line in lines)
-            {
-                
-            }
-
-        }
-
-        public TrainPlanner(string train)
-        {
-            
-
+            trainList.Add(trainName);
         }
         public ITrainPlanner CloseAt()
         {
             throw new NotImplementedException();
         }
 
-        public ITrainPlanner FollowSchedule()
+        public ITrainPlanner FollowSchedule() 
         {
-            throw new NotImplementedException();
+            timeTableList = TimeTable.CsvReader();
+            _trainInfos = trainList.Join(
+                timeTableList, 
+                Train => Train.Id , 
+                TimeTable => TimeTable.TrainId, 
+                (Train, TimeTable) => new TrainInfo{ 
+                    Id = Train.Id, 
+                    Name = Train.Name, 
+                    Speed = Train.MaxSpeed,
+                    Operated = Train.Operated,
+                    ArrivalTime = TimeTable.ArrivalTime,
+                    DepartureTime = TimeTable.DepartureTime,
+                    StationId = TimeTable.StationId
+                }
+                ).OrderBy(t => t.DepartureTime).ToList();
+
+            return this;
         }
 
         public ITrainPlanner LevelCrossing()
@@ -68,6 +68,7 @@ namespace TrainEngine
 
         public ITrainPlanner SetSwitch()
         {
+
             throw new NotImplementedException();
         }
 
@@ -83,7 +84,8 @@ namespace TrainEngine
 
         public ITrainPlanner ToPlan()
         {
-            throw new NotImplementedException();
+            TrainInfos = _trainInfos;
+            return this;
         }
     }
 }

@@ -6,6 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\TrainEngine\Data\passengers.txt" Link="passengers.txt" />
+    <Content Include="..\TrainEngine\Data\stations.txt" Link="stations.txt" />
+    <Content Include="..\TrainEngine\Data\timetable.txt" Link="timetable.txt" />
+    <Content Include="..\TrainEngine\Data\trains.txt" Link="trains.txt" />
+    <Content Include="..\TrainEngine\Data\traintrack.txt" Link="traintrack.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="26.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TrainEngine\TrainEngine.csproj" />
   </ItemGroup>
 

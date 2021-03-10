@@ -6,6 +6,7 @@ namespace TrainEngine
 {
     public interface ITrainPlanner
     {
+        public List<TrainInfo> TrainInfos { get; set; }
         ITrainPlanner FollowSchedule();
         ITrainPlanner LevelCrossing();
         ITrainPlanner CloseAt();
