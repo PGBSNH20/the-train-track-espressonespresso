@@ -10,8 +10,8 @@ namespace TrainEngine
     {
         public int TrainId { get ;set;}
         public int StationId { get; set; }
-        public int DepartureTime { get; set; }
-        public int ArrivalTime { get; set; }
+        public string DepartureTime { get; set; }
+        public string ArrivalTime { get; set; }
         
         public static List<TimeTable> CsvReader()
         {

@@ -16,19 +16,19 @@ namespace TrainConsole
         public static Clock clock = new Clock(9, 55);
         static void Main(string[] args)
         {
-            Time();
+            Time(); // Start clock
 
             Console.WriteLine("Train track!");
             //GetPropertyValues(clock);
 
             var train1 = new TrainPlanner(new Train(2 , "Liams tåg", 9000, true)).FollowSchedule().ToPlan();
-            //var train2 = new TrainPlanner(new Train(3 , "Kios tåg", 3, true)).FollowSchedule().ToPlan();
+            var train2 = new TrainPlanner(new Train(3 , "Kios tåg", 3, true)).FollowSchedule().ToPlan();
 
             var thread = new Thread(() => train1.Start());
-            //var thread2 = new Thread(() => train2.Start());
+            var thread2 = new Thread(() => train2.Start());
 
             thread.Start();
-            //thread2.Start();
+            thread2.Start();
 
             //foreach (var item in train2.TrainInfos)
             //{
@@ -54,7 +54,7 @@ namespace TrainConsole
             while (true)
             {
                 clock.ClockIsTicking();
-                Console.WriteLine(clock.TimeDisplay());
+                Console.WriteLine(Clock.TimeDisplay());
                 await Task.Delay(1000);
             }
         }
