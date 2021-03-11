@@ -105,48 +105,20 @@ namespace TrainEngine
         public void Start()
         {
 
-            //Spaghetto code
+            //Better code, still not optimal though.
 
             Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationName}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
 
-            while (Clock.TimeDisplay() != TrainInfos[0].DepartureTime)
+            for (int i = 0; i < TrainInfos.Count - 1; i++)
             {
-                Thread.Sleep(1000);
-            }
-
-            if (Clock.TimeDisplay() == TrainInfos[0].DepartureTime)
-            {
-                Console.WriteLine($"[{TrainInfos[0].Name}] Leaving for {TrainInfos[1].StationName}");
-            }
-
-            while (Clock.TimeDisplay() != TrainInfos[0].ArrivalTime)
-            {
-                Thread.Sleep(1000);
-            }
-
-            if (Clock.TimeDisplay() == TrainInfos[0].ArrivalTime)
-            {
-                Console.WriteLine($"[{TrainInfos[0].Name}] Arrived to {TrainInfos[1].StationName}");
-            }
-
-            while (Clock.TimeDisplay() != TrainInfos[1].DepartureTime)
-            {
-                Thread.Sleep(1000);
-            }
-
-            if (Clock.TimeDisplay() == TrainInfos[1].DepartureTime)
-            {
-                Console.WriteLine($"[{TrainInfos[0].Name}] Leaving for {TrainInfos[2].StationName}");
-            }
-
-            while (Clock.TimeDisplay() != TrainInfos[1].ArrivalTime)
-            {
-                Thread.Sleep(1000);
-            }
-
-            if (Clock.TimeDisplay() == TrainInfos[1].ArrivalTime)
-            {
-                Console.WriteLine($"[{TrainInfos[0].Name}] Arrived to {TrainInfos[2].StationName}");
+                while (Clock.TimeDisplay() != TrainInfos[i].DepartureTime)
+                    Thread.Sleep(1000);
+                if (Clock.TimeDisplay() == TrainInfos[i].DepartureTime)
+                    Console.WriteLine($"[{TrainInfos[i].Name}] Leaving for {TrainInfos[i + 1].StationName}");
+                while (Clock.TimeDisplay() != TrainInfos[i].ArrivalTime)
+                    Thread.Sleep(1000);
+                if (Clock.TimeDisplay() == TrainInfos[i].ArrivalTime)
+                    Console.WriteLine($"[{TrainInfos[i].Name}] Arrived to {TrainInfos[i + 1].StationName}");
             }
         }
 

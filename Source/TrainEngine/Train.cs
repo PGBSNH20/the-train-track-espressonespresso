@@ -19,9 +19,6 @@ namespace TrainEngine
             MaxSpeed = maxSpeed;
             Operated = operated;
         }
-
-
-        
     }
 
 
