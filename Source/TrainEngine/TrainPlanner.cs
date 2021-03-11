@@ -125,7 +125,7 @@ namespace TrainEngine
 
             //Spaghetto code
 
-            Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationId}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
+            Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationName}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
 
             while (Clock.TimeDisplay() != TrainInfos[0].DepartureTime)
             {
@@ -144,7 +144,7 @@ namespace TrainEngine
 
             if (Clock.TimeDisplay() == TrainInfos[0].ArrivalTime)
             {
-                Console.WriteLine($"[{TrainInfos[0].Name}] Arrived to station {TrainInfos[1].StationName}");
+                Console.WriteLine($"[{TrainInfos[0].Name}] Arrived to {TrainInfos[1].StationName}");
             }
 
             while (Clock.TimeDisplay() != TrainInfos[1].DepartureTime)
@@ -164,7 +164,7 @@ namespace TrainEngine
 
             if (Clock.TimeDisplay() == TrainInfos[2].ArrivalTime)
             {
-                Console.WriteLine($"[{TrainInfos[0].Name}] Arrived to station {TrainInfos[2].StationName}");
+                Console.WriteLine($"[{TrainInfos[0].Name}] Arrived to {TrainInfos[2].StationName}");
             }
         }
 
