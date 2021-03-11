@@ -47,6 +47,7 @@ namespace TrainEngine
             timeTableList = TimeTable.CsvReader();
             stationsList = Station.CsvReader();
 
+            //Join the lists and create a TrainInfo object. Then convert to list and add to trainInfo list.
             var s =
                 from train in trainList
                 join time in timeTableList on train.Id equals time.TrainId
@@ -67,25 +68,6 @@ namespace TrainEngine
             _trainInfos = s.ToList();
 
             return this;
-
-            //_trainInfos = trainList.Join(
-            //    timeTableList,
-            //    stationsList,
-            //    Train => Train.TrainId,
-            //    TimeTable => TimeTable.TrainId,
-            //    Station => Station.
-
-            //    (Train, TimeTable) => new TrainInfo
-            //    {
-            //        Id = Train.Id,
-            //        Name = Train.Name,
-            //        Speed = Train.MaxSpeed,
-            //        Operated = Train.Operated,
-            //        ArrivalTime = TimeTable.ArrivalTime,
-            //        DepartureTime = TimeTable.DepartureTime,
-            //        StationId = TimeTable.StationId
-            //    }
-            //    ).OrderBy(t => t.DepartureTime).ToList();
 
         }
 
