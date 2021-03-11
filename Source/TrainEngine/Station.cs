@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.Configuration.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,6 +14,9 @@ namespace TrainEngine
         public int Id { get; set; }
         public string StationName { get; set; }
         public string EndStation { get; set; }
+        
+        [Ignore]
+        public bool Occupied { get; set; }
 
         public static List<Station> CsvReader()
         {
@@ -31,5 +35,6 @@ namespace TrainEngine
             }
             return list;
         }
+        public static List<Station> stationsList = new List<Station>(); // Needs access everywhere.
     }
 }

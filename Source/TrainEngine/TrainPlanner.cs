@@ -31,7 +31,6 @@ namespace TrainEngine
         public List<ITrain> trainList = new List<ITrain>();
         public List<TimeTable> timeTableList = new List<TimeTable>();
         private List<TrainInfo> _trainInfos = new List<TrainInfo>();
-        private List<Station> stationsList = new List<Station>();
 
         public TrainPlanner(ITrain trainName)
         {
@@ -45,13 +44,13 @@ namespace TrainEngine
         public ITrainPlanner FollowSchedule()
         {
             timeTableList = TimeTable.CsvReader();
-            stationsList = Station.CsvReader();
+            Station.stationsList = Station.CsvReader();
 
             //Join the lists and create a TrainInfo object. Then convert to list and add to trainInfo list.
             var s =
                 from train in trainList
                 join time in timeTableList on train.Id equals time.TrainId
-                join station in stationsList on time.StationId equals station.Id
+                join station in Station.stationsList on time.StationId equals station.Id
                 orderby time.DepartureTime
                 select new TrainInfo()
                 {
@@ -61,14 +60,13 @@ namespace TrainEngine
                     ArrivalTime = time.ArrivalTime,
                     DepartureTime = time.DepartureTime,
                     StationName = station.StationName,
-                    EndStation = station.EndStation
-
+                    EndStation = station.EndStation,
+                    StationId = station.Id
                 };
 
             _trainInfos = s.ToList();
 
             return this;
-
         }
 
         public ITrainPlanner LevelCrossing()
@@ -104,21 +102,36 @@ namespace TrainEngine
         }
         public void Start()
         {
-
+            //Set the starting station to occcupied.
+            Station.stationsList.Find(a => a.StationName == TrainInfos[0].StationName).Occupied = true;
             //Better code, still not optimal though.
-
             Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationName}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
 
             for (int i = 0; i < TrainInfos.Count - 1; i++)
             {
                 while (Clock.TimeDisplay() != TrainInfos[i].DepartureTime)
                     Thread.Sleep(1000);
+
                 if (Clock.TimeDisplay() == TrainInfos[i].DepartureTime)
-                    Console.WriteLine($"[{TrainInfos[i].Name}] Leaving for {TrainInfos[i + 1].StationName}");
+                    Station.stationsList.Find(a => a.StationName == TrainInfos[i].StationName).Occupied = false;
+                Console.WriteLine($"[{TrainInfos[i].Name}@{TrainInfos[i].StationName}] Leaving for {TrainInfos[i + 1].StationName}");
+
                 while (Clock.TimeDisplay() != TrainInfos[i].ArrivalTime)
                     Thread.Sleep(1000);
+
                 if (Clock.TimeDisplay() == TrainInfos[i].ArrivalTime)
-                    Console.WriteLine($"[{TrainInfos[i].Name}] Arrived to {TrainInfos[i + 1].StationName}");
+                {
+                    if (Station.stationsList[i + 1].Occupied)
+                    {
+                        Console.WriteLine($"[{TrainInfos[i].Name}@Railway] Station is occupied, waiting for train at {TrainInfos[i + 1].StationName} to leave.");
+                    }
+                    while (Station.stationsList[i + 1].Occupied)
+                    {
+                        Thread.Sleep(3000);
+                    }
+                    Station.stationsList.Find(a => a.StationName == TrainInfos[i + 1].StationName).Occupied = true;
+                    Console.WriteLine($"[{TrainInfos[i].Name}@{TrainInfos[i + 1].StationName}] Arrived to {TrainInfos[i + 1].StationName}");
+                }
             }
         }
 
