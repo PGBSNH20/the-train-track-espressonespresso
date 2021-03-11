@@ -21,8 +21,8 @@ namespace TrainConsole
             Console.WriteLine("Train track!");
             //GetPropertyValues(clock);
 
-            var train1 = new TrainPlanner(new Train(2 , "Liams tåg", 9000, true)).FollowSchedule().ToPlan();
-            var train2 = new TrainPlanner(new Train(3 , "Kios tåg", 3, true)).FollowSchedule().ToPlan();
+            var train1 = new TrainPlanner(new Train(2, "Liams tåg", 9000, true)).FollowSchedule().ToPlan();
+            var train2 = new TrainPlanner(new Train(3, "Kios tåg", 3, true)).FollowSchedule().ToPlan();
 
             var thread = new Thread(() => train1.Start());
             var thread2 = new Thread(() => train2.Start());
@@ -58,21 +58,5 @@ namespace TrainConsole
                 await Task.Delay(1000);
             }
         }
-        private static void GetPropertyValues(Object obj)
-        {
-            Type t = obj.GetType();
-            Console.WriteLine("Type is: {0}", t.Name);
-            PropertyInfo[] props = t.GetProperties();
-            Console.WriteLine("Properties (N = {0}):",
-                              props.Length);
-            foreach (var prop in props)
-                if (prop.GetIndexParameters().Length == 0)
-                    Console.WriteLine("   {0} ({1}): {2}", prop.Name,
-                                      prop.PropertyType.Name,
-                                      prop.GetValue(obj));
-                else
-                    Console.WriteLine("   {0} ({1}): <Indexed>", prop.Name,
-                                      prop.PropertyType.Name);
-        }
-}
+    }
 }
