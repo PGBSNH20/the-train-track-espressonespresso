@@ -139,12 +139,12 @@ namespace TrainEngine
                 Console.WriteLine($"[{TrainInfos[0].Name}] Leaving for {TrainInfos[2].StationName}");
             }
 
-            while (Clock.TimeDisplay() != TrainInfos[2].ArrivalTime)
+            while (Clock.TimeDisplay() != TrainInfos[1].ArrivalTime)
             {
                 Thread.Sleep(1000);
             }
 
-            if (Clock.TimeDisplay() == TrainInfos[2].ArrivalTime)
+            if (Clock.TimeDisplay() == TrainInfos[1].ArrivalTime)
             {
                 Console.WriteLine($"[{TrainInfos[0].Name}] Arrived to {TrainInfos[2].StationName}");
             }
