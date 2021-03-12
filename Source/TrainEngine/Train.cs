@@ -6,7 +6,6 @@ namespace TrainEngine
 {
     public class Train : ITrain
     {
-        public TimeTable TimeTable { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public int MaxSpeed { get; set; }

@@ -14,27 +14,18 @@ namespace TrainEngine
         public int Id { get; set; }
         public string StationName { get; set; }
         public string EndStation { get; set; }
-        
-        [Ignore]
+
+        [Ignore] // Tell CSVHelper to ignore this prop when mapping.
         public bool Occupied { get; set; }
 
         public static List<Station> CsvReader()
         {
-            var list = new List<Station>();
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                Delimiter = "|"
-            };
-            using (var reader = new StreamReader(@"Data\stations.txt"))
-            using (var csv = new CsvReader(reader, config))
-            {
-                foreach (var item in csv.GetRecords<Station>())
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = "|" };
+            using var reader = new StreamReader(@"Data\stations.txt");
+            using var csv = new CsvReader(reader, config);
+            return csv.GetRecords<Station>().ToList();
         }
-        public static List<Station> stationsList = new List<Station>(); // Needs access everywhere.
+        
+        public static List<Station> StationsList = new List<Station>(); // Needs access everywhere.
     }
 }

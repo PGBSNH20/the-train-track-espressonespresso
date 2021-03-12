@@ -3,6 +3,7 @@ using CsvHelper.Configuration.Attributes;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace TrainEngine
 {
@@ -15,25 +16,10 @@ namespace TrainEngine
         
         public static List<TimeTable> CsvReader()
         {
-            var list = new List<TimeTable>();
-            using (var reader = new StreamReader(@"Data\timetable.txt"))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                foreach (var item in csv.GetRecords<TimeTable>())
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
+            using var reader = new StreamReader(@"Data\timetable.txt");
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            return csv.GetRecords<TimeTable>().ToList();
         }
-        //public TimeTable(int trainId, int stationId, string departureTime, string arrivalTime)
-        //{
-        //    TrainId = trainId;
-        //    StationId = stationId;
-        //    DepartureTime = departureTime;
-        //    ArrivalTime = arrivalTime;
-        //}
-
     }
 
 }

@@ -13,7 +13,7 @@ namespace TrainEngine
             Hours = hours;
             Minutes = minutes;
 
-            this.CheckingTimeFormat();
+            CheckingTimeFormat();
         }
 
         public void CheckingTimeFormat()
@@ -40,7 +40,7 @@ namespace TrainEngine
         public static string TimeDisplay()
         {
             // Convert to string with D2 format, just to get the '00' at the beginning, so that it can represent a digital watch. 
-            return Hours.ToString("D2")  + ":" + Minutes.ToString("D2");
+            return Hours.ToString("D2") + ":" + Minutes.ToString("D2");
         }
 
     }

@@ -12,7 +12,7 @@ namespace TrainConsole
 
     class Program
     {
-        public static Clock clock = new Clock(9, 55);
+        public static Clock Clock = new(9, 55);
         static void Main(string[] args)
         {
             Time(); // Start clock
@@ -29,11 +29,11 @@ namespace TrainConsole
             thread2.Start();
         }
 
-        static async void Time()
+        private static async void Time()
         {
             while (true)
             {
-                clock.ClockIsTicking();
+                Clock.ClockIsTicking();
                 Console.WriteLine(Clock.TimeDisplay());
                 await Task.Delay(1000);
             }
