@@ -25,7 +25,31 @@ namespace TrainEngine
             using var csv = new CsvReader(reader, config);
             return csv.GetRecords<Station>().ToList();
         }
-        
+
         public static List<Station> StationsList = new List<Station>(); // Needs access everywhere.
+
+        private static readonly object MyLocker = new object(); // Object to use
+
+        //Two methods for getting list information. By using these methods instead of the list directly, we don't have to worry about deadlocks.
+        //public static Station ReturnAllStations()
+        //{
+        //    return StationsList.All()
+        //}
+
+        public static Station FindStation(string stationName)
+        {
+            lock (MyLocker)
+            {
+                return StationsList.Find(a => a.StationName == stationName);
+            }
+        }
+
+        public static bool Occupy(string stationName, bool isOccupied)
+        {
+            lock (MyLocker)
+            {
+                return StationsList.Find(a => a.StationName == stationName).Occupied = isOccupied;
+            }
+        }
     }
 }

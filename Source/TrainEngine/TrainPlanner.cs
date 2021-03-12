@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace TrainEngine
 {
-    public class TrainInfo
+    public class TrainInfo // TrainInfo is a combination of Train and TimeTable class. It is used in the join query to create a list of type TrainInfo.
     {
         public string Name;
         public string StationName;
@@ -96,7 +96,7 @@ namespace TrainEngine
         public void Start() // Possible deadlock scenario here, do not not not not let the threads use the list at same time at the moment.
         {
             //Set the starting station to occupied.
-            Station.StationsList.Find(a => a.StationName == TrainInfos[0].StationName).Occupied = true;
+            Station.Occupy(TrainInfos[0].StationName, true);
             // Output the starting location.
             Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationName}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
             //Loop over the TrainInfo list and compare with the static stationList. We will use the stationlist to set occupy to true and false.
@@ -106,7 +106,7 @@ namespace TrainEngine
                     Thread.Sleep(1000);
 
                 if (Clock.TimeDisplay() == TrainInfos[i].DepartureTime) // If the time is equal to departure time, set occupy in list for the current station to false and output.
-                    Station.StationsList.Find(a => a.StationName == TrainInfos[i].StationName).Occupied = false;
+                    Station.Occupy(TrainInfos[i].StationName, false);
                 Console.WriteLine($"[{TrainInfos[i].Name}@{TrainInfos[i].StationName}] Leaving for {TrainInfos[i + 1].StationName}");
 
                 while (Clock.TimeDisplay() != TrainInfos[i].ArrivalTime) // While clock is not arrival time for the current thread, sleep for 1 second.
@@ -114,16 +114,16 @@ namespace TrainEngine
 
                 if (Clock.TimeDisplay() == TrainInfos[i].ArrivalTime) // If the time is equal to arrival time, check if the current station is occupied. If true, output information.
                 {
-                    if (Station.StationsList[i + 1].Occupied)
+                    if (Station.FindStation(TrainInfos[i + 1].StationName).Occupied)
                     {
                         Console.WriteLine($"[{TrainInfos[i].Name}@Railway] Station is occupied, waiting for train at {TrainInfos[i + 1].StationName} to leave.");
                     }
-                    while (Station.StationsList[i + 1].Occupied) // While station is occupied, sleep for 3 seconds.
+                    while (Station.FindStation(TrainInfos[i + 1].StationName).Occupied) // While station is occupied, sleep for 3 seconds.
                     {
                         Thread.Sleep(3000);
                     }
                     // Occupy the new station
-                    Station.StationsList.Find(a => a.StationName == TrainInfos[i + 1].StationName).Occupied = true; // Find the index in stationList using the stationname from traininfos. 
+                    Station.Occupy(TrainInfos[i + 1].StationName, true); // Find the index in stationList using the stationname from traininfos. 
                     Console.WriteLine($"[{TrainInfos[i].Name}@{TrainInfos[i + 1].StationName}] Arrived to {TrainInfos[i + 1].StationName}");
                 }
             }
