@@ -43,7 +43,7 @@ namespace TrainEngine
             var query =
                 from train in _trainList
                 join time in _timeTableList on train.Id equals time.TrainId
-                join station in Station.StationsList on time.StationId equals station.Id
+                join station in Station.AllStations() on time.StationId equals station.Id
                 orderby time.DepartureTime
                 select new TrainInfo()
                 {
@@ -77,17 +77,6 @@ namespace TrainEngine
 
             throw new NotImplementedException();
         }
-
-        public ITrainPlanner StartTrainAt()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ITrainPlanner StopTrainAt()
-        {
-            throw new NotImplementedException();
-        }
-
         public ITrainPlanner ToPlan()
         {
             TrainInfos = _trainInfos;

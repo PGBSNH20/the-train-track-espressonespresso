@@ -28,6 +28,7 @@ namespace TrainEngine
 
         public static List<Station> StationsList = new List<Station>(); // Needs access everywhere.
 
+
         private static readonly object MyLocker = new object(); // Object to use
 
         //Two methods for getting list information. By using these methods instead of the list directly, we don't have to worry about deadlocks.
@@ -36,6 +37,13 @@ namespace TrainEngine
         //    return StationsList.All()
         //}
 
+        public static List<Station> AllStations()
+        {
+            lock (MyLocker)
+            {
+                return StationsList;
+            }
+        }
         public static Station FindStation(string stationName)
         {
             lock (MyLocker)
