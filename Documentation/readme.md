@@ -9,3 +9,7 @@ Remodeling of API, basically restarting project. Added clock function to simulat
 Created Start method for simulating the trains and logic for departure and arrival based on time returned by the clock class.
 
 Created CsvReader for Station class to map csv to object. Created logic for checking if a station is currently occupied. 
+
+## 2021-03-12
+Created lock methods for accessing StationList instead of accessing it directly. If more than 1 thread accessed the list at the same time, a deadlock occured.
+
