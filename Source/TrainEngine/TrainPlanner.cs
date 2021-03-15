@@ -24,6 +24,12 @@ namespace TrainEngine
         public int Distance;
     }
 
+    public class TrainCrash
+    {
+        public int StationId;
+        public string ArrivalTime;
+    }
+
     public class TrainPlanner : ITrainPlanner
     {
         public Switch Direction;
@@ -32,7 +38,7 @@ namespace TrainEngine
         private List<TimeTable> _timeTableList = new List<TimeTable>();
         private List<TrainInfo> _trainInfos = new List<TrainInfo>();
 
-        private static List<TrainInfo> _crashList = new List<TrainInfo>(); 
+        private static List<TrainCrash> _crashList = new List<TrainCrash>();
 
         public TrainPlanner(ITrain trainName)
         {
@@ -70,8 +76,20 @@ namespace TrainEngine
 
             _trainInfos = query.ToList();
 
-            foreach (var item in query.ToList())
-                _crashList.Add(item);
+
+            for (int i = 0; i < query.ToList().Count - 1; i++)
+            {
+                var station = query.ToList()[i + 1].StationId;
+                var arrivalTime = query.ToList()[i].ArrivalTime;
+
+                _crashList.Add(
+                    new TrainCrash
+                    {
+                        StationId = station,
+                        ArrivalTime = arrivalTime
+                    }
+                );
+            }
 
             return this;
         }
@@ -144,8 +162,12 @@ namespace TrainEngine
 
                 if (Clock.TimeDisplay() == TrainInfos[i].ArrivalTime) // If the time is equal to arrival time, check if the current station is occupied. If true, output information.
                 {
+                    if (_crashList.GroupBy(c => new { c.StationId, c.ArrivalTime }).Any(g => g.Count() >= 2))
+                    {
+                        Console.WriteLine(TrainInfos[0].Name + " has crashed");
+                        break;
+                    }
 
-                    _crashList;
 
                     if (Station.FindStation(TrainInfos[i + 1].StationName).Occupied)
                     {
