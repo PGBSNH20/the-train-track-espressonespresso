@@ -8,9 +8,13 @@
   <ItemGroup>
     <Content Include="..\TrainEngine\Data\passengers.txt" Link="passengers.txt" />
     <Content Include="..\TrainEngine\Data\stations.txt" Link="stations.txt" />
-    <Content Include="..\TrainEngine\Data\timetable.txt" Link="timetable.txt" />
+    <Content Include="..\TrainEngine\Data\timetable.txt" Link="timetable.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\TrainEngine\Data\trains.txt" Link="trains.txt" />
-    <Content Include="..\TrainEngine\Data\traintrack.txt" Link="traintrack.txt" />
+    <Content Include="..\TrainEngine\Data\traintrack.txt" Link="traintrack.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

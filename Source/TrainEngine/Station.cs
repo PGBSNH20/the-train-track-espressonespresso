@@ -23,11 +23,11 @@ namespace TrainEngine
             var config = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = "|" };
             using var reader = new StreamReader(@"Data\stations.txt");
             using var csv = new CsvReader(reader, config);
+
             return csv.GetRecords<Station>().ToList();
         }
 
         public static List<Station> StationsList = new List<Station>(); // Needs access everywhere.
-
 
         private static readonly object MyLocker = new object(); // Object to use
 

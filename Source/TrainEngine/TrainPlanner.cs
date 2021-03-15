@@ -5,6 +5,12 @@ using System.Threading;
 
 namespace TrainEngine
 {
+    public enum Switch
+    {
+        Left,
+        Right
+    }
+
     public class TrainInfo // TrainInfo is a combination of Train and TimeTable class. It is used in the join query to create a list of type TrainInfo.
     {
         public string Name;
@@ -15,15 +21,18 @@ namespace TrainEngine
         public string ArrivalTime;
         public string DepartureTime;
         public int StationId;
+        public int Distance;
     }
 
     public class TrainPlanner : ITrainPlanner
     {
+        public Switch Direction;
         public List<TrainInfo> TrainInfos { get; set; }
-
         private readonly List<ITrain> _trainList = new List<ITrain>();
         private List<TimeTable> _timeTableList = new List<TimeTable>();
         private List<TrainInfo> _trainInfos = new List<TrainInfo>();
+
+        private static List<TrainInfo> _crashList = new List<TrainInfo>(); 
 
         public TrainPlanner(ITrain trainName)
         {
@@ -38,6 +47,7 @@ namespace TrainEngine
         {
             _timeTableList = TimeTable.CsvReader();
             Station.StationsList = Station.CsvReader();
+            DistanceInformation.trainTrackList = DistanceInformation.CsvReader();
 
             //Join the lists and create a TrainInfo object. Then convert to list and add to trainInfo list.
             var query =
@@ -57,7 +67,11 @@ namespace TrainEngine
                     StationId = station.Id
                 };
 
+
             _trainInfos = query.ToList();
+
+            foreach (var item in query.ToList())
+                _crashList.Add(item);
 
             return this;
         }
@@ -72,11 +86,12 @@ namespace TrainEngine
             throw new NotImplementedException();
         }
 
-        public ITrainPlanner SetSwitch()
+        public ITrainPlanner SetSwitch(Switch direction)
         {
-
-            throw new NotImplementedException();
+            Direction = direction;
+            return this;
         }
+
         public ITrainPlanner ToPlan()
         {
             TrainInfos = _trainInfos;
@@ -84,11 +99,33 @@ namespace TrainEngine
         }
         public void Start() // Possible deadlock scenario here, do not not not not let the threads use the list at same time at the moment.
         {
+
+            //var endStations = TrainInfos.Join(Station.StationsList, t => t.StationId, s => s.Id, (t, s) => new { endStation = t.EndStation, id = s.Id });
+
             //Set the starting station to occupied.
             Station.Occupy(TrainInfos[0].StationName, true);
             // Output the starting location.
             Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationName}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
             //Loop over the TrainInfo list and compare with the static stationList. We will use the stationlist to set occupy to true and false.
+
+            lock (this)
+            {
+                if ((TrainInfos[0].StationId == 1 && TrainInfos[1].StationId == 4) ||
+                    (TrainInfos[0].StationId == 3 && TrainInfos[1].StationId == 2))
+                {
+                    if (Direction != Switch.Right)
+                        throw new ArgumentException("Invalid direction");
+                }
+                else if ((TrainInfos[0].StationId == 1 && TrainInfos[1].StationId == 2) ||
+                    (TrainInfos[0].StationId == 3 && TrainInfos[1].StationId == 4))
+                {
+                    if (Direction != Switch.Left)
+                        throw new ArgumentException("Invalid direction");
+                }
+            }
+
+            Console.WriteLine(TrainInfos[0].Name + " " + Direction);
+
             for (int i = 0; i < TrainInfos.Count - 1; i++)
             {
                 while (Clock.TimeDisplay() != TrainInfos[i].DepartureTime) // While clock is not departure time for the current thread, sleep for 1 second.
@@ -96,13 +133,20 @@ namespace TrainEngine
 
                 if (Clock.TimeDisplay() == TrainInfos[i].DepartureTime) // If the time is equal to departure time, set occupy in list for the current station to false and output.
                     Station.Occupy(TrainInfos[i].StationName, false);
+
                 Console.WriteLine($"[{TrainInfos[i].Name}@{TrainInfos[i].StationName}] Leaving for {TrainInfos[i + 1].StationName}");
+
+                // Displays the distance 
+                Console.WriteLine(DistanceInformation.DestinationDistance(TrainInfos[i], TrainInfos[i + 1]));
 
                 while (Clock.TimeDisplay() != TrainInfos[i].ArrivalTime) // While clock is not arrival time for the current thread, sleep for 1 second.
                     Thread.Sleep(1000);
 
                 if (Clock.TimeDisplay() == TrainInfos[i].ArrivalTime) // If the time is equal to arrival time, check if the current station is occupied. If true, output information.
                 {
+
+                    _crashList;
+
                     if (Station.FindStation(TrainInfos[i + 1].StationName).Occupied)
                     {
                         Console.WriteLine($"[{TrainInfos[i].Name}@Railway] Station is occupied, waiting for train at {TrainInfos[i + 1].StationName} to leave.");
@@ -117,6 +161,5 @@ namespace TrainEngine
                 }
             }
         }
-
     }
 }

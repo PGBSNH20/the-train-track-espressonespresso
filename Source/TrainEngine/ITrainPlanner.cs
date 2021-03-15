@@ -11,7 +11,7 @@ namespace TrainEngine
         ITrainPlanner LevelCrossing();
         ITrainPlanner CloseAt();
         ITrainPlanner OpenAt();
-        ITrainPlanner SetSwitch();
+        ITrainPlanner SetSwitch(Switch direction);
         ITrainPlanner ToPlan();
         void Start();
     }
