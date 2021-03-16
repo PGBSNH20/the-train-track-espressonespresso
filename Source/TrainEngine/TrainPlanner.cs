@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace TrainEngine
 {
-    public enum Switch
+    public enum Switch // Simple enum for setting the direction of train.
     {
         Left,
         Right
@@ -83,11 +83,8 @@ namespace TrainEngine
             TrainInfos = _trainInfos;
             return this;
         }
-        public void Start() // Possible deadlock scenario here, do not not not not let the threads use the list at same time at the moment.
+        public void Start() // Starts the simulation
         {
-
-            //var endStations = TrainInfos.Join(Station.StationsList, t => t.StationId, s => s.Id, (t, s) => new { endStation = t.EndStation, id = s.Id });
-
             //Set the starting station to occupied.
             Station.Occupy(TrainInfos[0].StationName, true);
             // Output the starting location.
@@ -109,7 +106,7 @@ namespace TrainEngine
                 }
             }
 
-            Console.WriteLine(TrainInfos[0].Name + " " + Direction);
+            Console.WriteLine(TrainInfos[0].Name + " headed in direction: " + Direction); // Print what direction the train is heading in.
 
             for (int i = 0; i < TrainInfos.Count - 1; i++)
             {
