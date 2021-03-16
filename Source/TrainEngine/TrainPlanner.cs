@@ -10,26 +10,6 @@ namespace TrainEngine
         Left,
         Right
     }
-
-    public class TrainInfo // TrainInfo is a combination of Train and TimeTable class. It is used in the join query to create a list of type TrainInfo.
-    {
-        public string Name;
-        public string StationName;
-        public string EndStation;
-        public int Speed;
-        public bool Operated;
-        public string ArrivalTime;
-        public string DepartureTime;
-        public int StationId;
-        public int Distance;
-    }
-
-    public class TrainCrash
-    {
-        public int StationId;
-        public string ArrivalTime;
-    }
-
     public class TrainPlanner : ITrainPlanner
     {
         public Switch Direction;
@@ -37,8 +17,8 @@ namespace TrainEngine
         private readonly List<ITrain> _trainList = new List<ITrain>();
         private List<TimeTable> _timeTableList = new List<TimeTable>();
         private List<TrainInfo> _trainInfos = new List<TrainInfo>();
-
         private static List<TrainCrash> _crashList = new List<TrainCrash>();
+        private readonly object _lockObject = new object();
 
         public TrainPlanner(ITrain trainName)
         {
@@ -72,28 +52,16 @@ namespace TrainEngine
                     EndStation = station.EndStation,
                     StationId = station.Id
                 };
-
-
             _trainInfos = query.ToList();
-
-
+            // Create a object to be able to detect if two trains are planned to arrvie to the samestation at the same minute. 
             for (int i = 0; i < query.ToList().Count - 1; i++)
             {
                 var station = query.ToList()[i + 1].StationId;
                 var arrivalTime = query.ToList()[i].ArrivalTime;
-
-                _crashList.Add(
-                    new TrainCrash
-                    {
-                        StationId = station,
-                        ArrivalTime = arrivalTime
-                    }
-                );
+                _crashList.Add(new TrainCrash { StationId = station, ArrivalTime = arrivalTime });
             }
-
             return this;
         }
-
         public ITrainPlanner LevelCrossing()
         {
             throw new NotImplementedException();
@@ -125,8 +93,7 @@ namespace TrainEngine
             // Output the starting location.
             Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationName}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
             //Loop over the TrainInfo list and compare with the static stationList. We will use the stationlist to set occupy to true and false.
-
-            lock (this)
+            lock (_lockObject)
             {
                 if ((TrainInfos[0].StationId == 1 && TrainInfos[1].StationId == 4) ||
                     (TrainInfos[0].StationId == 3 && TrainInfos[1].StationId == 2))
@@ -167,16 +134,14 @@ namespace TrainEngine
                         Console.WriteLine(TrainInfos[0].Name + " has crashed");
                         break;
                     }
-
-
                     if (Station.FindStation(TrainInfos[i + 1].StationName).Occupied)
                     {
                         Console.WriteLine($"[{TrainInfos[i].Name}@Railway] Station is occupied, waiting for train at {TrainInfos[i + 1].StationName} to leave.");
                     }
+
                     while (Station.FindStation(TrainInfos[i + 1].StationName).Occupied) // While station is occupied, sleep for 3 seconds.
-                    {
                         Thread.Sleep(3000);
-                    }
+
                     // Occupy the new station
                     Station.Occupy(TrainInfos[i + 1].StationName, true); // Find the index in stationList using the stationname from traininfos. 
                     Console.WriteLine($"[{TrainInfos[i].Name}@{TrainInfos[i + 1].StationName}] Arrived to {TrainInfos[i + 1].StationName}");
