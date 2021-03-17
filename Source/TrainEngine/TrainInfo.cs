@@ -17,5 +17,6 @@ namespace TrainEngine
         public string DepartureTime;
         public int StationId;
         public int Distance;
+        public bool hasCrashed;
     }
 }
