@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace TrainEngine
 {
-    public enum Switch
+    public enum Switch // Simple enum for setting the direction of train.
     {
         Left,
         Right
@@ -22,7 +22,6 @@ namespace TrainEngine
         public string DepartureTime;
         public int StationId;
         public int Distance;
-        public bool hasCrashed;
     }
 
     public class TrainCrash
@@ -38,8 +37,8 @@ namespace TrainEngine
         private readonly List<ITrain> _trainList = new List<ITrain>();
         private List<TimeTable> _timeTableList = new List<TimeTable>();
         private List<TrainInfo> _trainInfos = new List<TrainInfo>();
-
         private static List<TrainCrash> _crashList = new List<TrainCrash>();
+        private readonly object _lockObject = new object();
 
         public TrainPlanner(ITrain trainName)
         {
@@ -74,28 +73,16 @@ namespace TrainEngine
                     StationId = station.Id,
                     hasCrashed = false
                 };
-
-
             _trainInfos = query.ToList();
-
-
+            // Create a object to be able to detect if two trains are planned to arrvie to the samestation at the same minute. 
             for (int i = 0; i < query.ToList().Count - 1; i++)
             {
                 var station = query.ToList()[i + 1].StationId;
                 var arrivalTime = query.ToList()[i].ArrivalTime;
-
-                _crashList.Add(
-                    new TrainCrash
-                    {
-                        StationId = station,
-                        ArrivalTime = arrivalTime
-                    }
-                );
+                _crashList.Add(new TrainCrash { StationId = station, ArrivalTime = arrivalTime });
             }
-
             return this;
         }
-
         public ITrainPlanner LevelCrossing()
         {
             throw new NotImplementedException();
@@ -117,18 +104,14 @@ namespace TrainEngine
             TrainInfos = _trainInfos;
             return this;
         }
-        public void Start() // Possible deadlock scenario here, do not not not not let the threads use the list at same time at the moment.
+        public void Start() // Starts the simulation
         {
-
-            //var endStations = TrainInfos.Join(Station.StationsList, t => t.StationId, s => s.Id, (t, s) => new { endStation = t.EndStation, id = s.Id });
-
             //Set the starting station to occupied.
             Station.Occupy(TrainInfos[0].StationName, true);
             // Output the starting location.
             Console.WriteLine($"[{TrainInfos[0].Name}] Starting at {TrainInfos[0].StationName}. Leaving for {TrainInfos[1].StationName} at {TrainInfos[0].DepartureTime}");
             //Loop over the TrainInfo list and compare with the static stationList. We will use the stationlist to set occupy to true and false.
-
-            lock (this)
+            lock (_lockObject)
             {
                 if ((TrainInfos[0].StationId == 1 && TrainInfos[1].StationId == 4) ||
                     (TrainInfos[0].StationId == 3 && TrainInfos[1].StationId == 2))
@@ -144,7 +127,7 @@ namespace TrainEngine
                 }
             }
 
-            Console.WriteLine(TrainInfos[0].Name + " turns " + Direction);
+            Console.WriteLine(TrainInfos[0].Name + " headed in direction: " + Direction); // Print what direction the train is heading in.
 
             for (int i = 0; i < TrainInfos.Count - 1; i++)
             {
@@ -171,15 +154,15 @@ namespace TrainEngine
                         break;
                     }
 
+
                     if (Station.FindStation(TrainInfos[i + 1].StationName).Occupied)
                     {
                         Console.WriteLine($"[{TrainInfos[i].Name}@Railway] Station is occupied, waiting for train at {TrainInfos[i + 1].StationName} to leave.");
                     }
 
                     while (Station.FindStation(TrainInfos[i + 1].StationName).Occupied) // While station is occupied, sleep for 3 seconds.
-                    {
                         Thread.Sleep(3000);
-                    }
+
                     // Occupy the new station
                     Station.Occupy(TrainInfos[i + 1].StationName, true); // Find the index in stationList using the stationname from traininfos. 
                     Console.WriteLine($"[{TrainInfos[i].Name}@{TrainInfos[i + 1].StationName}] Arrived to {TrainInfos[i + 1].StationName}");
