@@ -43,9 +43,13 @@ namespace TrainEngine.Tests
             thread.Start();
             thread2.Start();
 
-            while (TrainEngine.Clock.TimeDisplay() == "10:06")
+
+            var timeDisplay = Clock.TimeDisplay();
+            if (timeDisplay == "10:06")
+            {
                 // Assert
                 Assert.True(result.TrainInfos[0].hasCrashed);
+            }
 
         }
     }
