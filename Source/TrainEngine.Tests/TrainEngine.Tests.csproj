@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TrainConsole\TrainConsole.csproj" />
     <ProjectReference Include="..\TrainEngine\TrainEngine.csproj" />
   </ItemGroup>
 

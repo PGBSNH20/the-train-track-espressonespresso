@@ -29,6 +29,7 @@ namespace TrainConsole
             thread.Start();
             thread2.Start();
 
+            Console.WriteLine(train1.TrainInfos[0].hasCrashed);
             //var trainInfos = new TrainInfo();
 
 
@@ -62,7 +63,7 @@ namespace TrainConsole
             //Console.WriteLine(distance - 1);
         }
 
-        private static async void Time()
+        public static async void Time()
         {
             while (true)
             {

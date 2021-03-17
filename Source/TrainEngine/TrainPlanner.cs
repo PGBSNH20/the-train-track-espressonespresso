@@ -22,6 +22,7 @@ namespace TrainEngine
         public string DepartureTime;
         public int StationId;
         public int Distance;
+        public bool hasCrashed;
     }
 
     public class TrainCrash
@@ -70,7 +71,8 @@ namespace TrainEngine
                     DepartureTime = time.DepartureTime,
                     StationName = station.StationName,
                     EndStation = station.EndStation,
-                    StationId = station.Id
+                    StationId = station.Id,
+                    hasCrashed = false
                 };
 
 
@@ -142,7 +144,7 @@ namespace TrainEngine
                 }
             }
 
-            Console.WriteLine(TrainInfos[0].Name + " " + Direction);
+            Console.WriteLine(TrainInfos[0].Name + " turns " + Direction);
 
             for (int i = 0; i < TrainInfos.Count - 1; i++)
             {
@@ -165,14 +167,15 @@ namespace TrainEngine
                     if (_crashList.GroupBy(c => new { c.StationId, c.ArrivalTime }).Any(g => g.Count() >= 2))
                     {
                         Console.WriteLine(TrainInfos[0].Name + " has crashed");
+                        TrainInfos[i].hasCrashed = true;
                         break;
                     }
-
 
                     if (Station.FindStation(TrainInfos[i + 1].StationName).Occupied)
                     {
                         Console.WriteLine($"[{TrainInfos[i].Name}@Railway] Station is occupied, waiting for train at {TrainInfos[i + 1].StationName} to leave.");
                     }
+
                     while (Station.FindStation(TrainInfos[i + 1].StationName).Occupied) // While station is occupied, sleep for 3 seconds.
                     {
                         Thread.Sleep(3000);
