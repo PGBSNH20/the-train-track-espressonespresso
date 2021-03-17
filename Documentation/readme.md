@@ -14,4 +14,4 @@ Created CsvReader for Station class to map csv to object. Created logic for chec
 Created lock methods for accessing StationList instead of accessing it directly. If more than 1 thread accessed the list at the same time, a deadlock occured.
 
 ## 2021-03-15
-Inserted some logics in the Start-method in our API. Also some logics in our Switch-method so that the train can travel in the right course. It's now able for the trains to crash, when they crash the program stops.   
+Inserted some logics in the Start-method of our API. Also some logics in our Switch-method so that the train can travel in the right course. It's now able for the trains to crash, when they crash the program stops.   
